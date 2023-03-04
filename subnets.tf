@@ -10,3 +10,4 @@ resource "aws_subnet" "main_subnet"{
     tags={
         Name = "mairam subnet-${each.key}"
     }
+}
