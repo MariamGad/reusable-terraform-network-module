@@ -28,7 +28,15 @@ variable "private_subnets" {
   
 }
 
-variable "vpc_id"{}
-variable "internet_gw_name"{}
-variable "route_table_name"{}
-variable db_subent_group_name{}
+variable vpc_id{
+   description="To get vpc id"
+}
+variable internet_gw_name{
+   description="internet gateway name"
+}
+variable route_table_name{
+   description="route table name"
+}
+variable db_subent_group_name{
+   description="database subnet group"
+}

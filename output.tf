@@ -1,4 +1,3 @@
-
 # pass public subnet id to another module
 output "subnet_id" {
   value = "${aws_subnet.public-subnet["sub-1-public"].id}"
