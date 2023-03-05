@@ -1,8 +1,8 @@
 data "aws_vpc" "selected" {
   id = var.vpc_id
 }
-resource "aws_subnet" "main_subnet"{
-    for_each = var.subnets
+resource "aws_subnet" "public-subnet"{
+    for_each = var.public_subnets
     availability_zone_id = each.value["az"]
     cidr_block = each.value["cidr"]
     vpc_id =  data.aws_vpc.selected.id
@@ -10,7 +10,21 @@ resource "aws_subnet" "main_subnet"{
     tags={
         Name = "mairam-subnet-${each.key}"
     }
+    
 }
+
+resource "aws_subnet" "private-subnet"{
+    for_each = var.private_subnets
+    availability_zone_id = each.value["az"]
+    cidr_block = each.value["cidr"]
+    vpc_id =  data.aws_vpc.selected.id
+    
+    tags={
+        Name = "mairam-subnet-${each.key}"
+    }
+    
+}
+
 resource "aws_internet_gateway" "gw" {
   vpc_id = data.aws_vpc.selected.id
 
@@ -27,7 +41,8 @@ resource "aws_route_table" "public" {
   }
 }
 resource "aws_route_table_association" "association1" {
-  subnet_id      = aws_subnet.main_subnet["sub-1-public"].id
+  for_each = aws_subnet.public-subnet
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.public.id
 }
 
@@ -38,5 +53,5 @@ resource "aws_route_table_association" "association2" {
 
 # pass public subnet id to another module
 output "subnet_id" {
-  value = "${aws_subnet.main_subnet["sub-1-public"].id}"
+  value = "${aws_subnet.public-subnet["sub-1-public"].id}"
 }
