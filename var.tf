@@ -31,3 +31,4 @@ variable "private_subnets" {
 variable "vpc_id"{}
 variable "internet_gw_name"{}
 variable "route_table_name"{}
+variable db_subent_group_name{}

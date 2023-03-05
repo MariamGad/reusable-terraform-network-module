@@ -51,7 +51,17 @@ resource "aws_route_table_association" "association2" {
   route_table_id = aws_route_table.public.id
 }
 
+resource "aws_db_subnet_group" "db-subent-group"{
+  name= var.db_subent_group_name
+  subnet_ids= [for subnet in aws_subnet.private-subnet:subnet.id]
+}
+
 # pass public subnet id to another module
 output "subnet_id" {
   value = "${aws_subnet.public-subnet["sub-1-public"].id}"
+}
+
+# pass private subnet ids to datbase module
+output "private-subnet-ids"{
+  value= "${aws_db_subnet_group.db-subent-group.id}"
 }
